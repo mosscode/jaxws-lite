@@ -38,9 +38,12 @@
 package com.moss.jaxwslite;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.xml.namespace.QName;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
@@ -69,7 +72,16 @@ public class ServiceFactory {
 		
 		return defaultFactory.create(u, namespace, iface);
 	}
-	
+	public static <T> T createDefault(String url, QName qname, Class<T> iface) {
+		try {
+			return defaultFactory.create(new URL(url), qname.getNamespaceURI(), iface);
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	public static <T> T createDefault(URL url, QName qname, Class<T> iface) {
+		return defaultFactory.create(url, qname.getNamespaceURI(), iface);
+	}
 	public static <T> T createDefault(URL url, String namespace, Class<T> iface) {
 		return defaultFactory.create(url, namespace, iface);
 	}
